@@ -30,7 +30,6 @@ NUMBERS = {
     "десять": 10
 }
 
-# Ограниченный словарь (ускоряет Vosk)
 WORDS = [
     "джер",
     "сон",
@@ -50,10 +49,6 @@ WORDS = [
     "десять"
 ]
 
-# --------------------
-# MODEL
-# --------------------
-
 model = Model("model")
 
 recognizer = KaldiRecognizer(
@@ -61,10 +56,6 @@ recognizer = KaldiRecognizer(
     SAMPLE_RATE,
     json.dumps(WORDS, ensure_ascii=False)
 )
-
-# --------------------
-# LOGIC
-# --------------------
 
 def handle_command(text: str):
 
@@ -77,17 +68,14 @@ def handle_command(text: str):
 
     print("Команда:", command)
 
-    # 🔴 СОН
     if "сон" in command:
         print("→ Сон")
         sleep_pc()
 
-    # 🔴 ВЫКЛЮЧЕНИЕ
     elif "выключ" in command:
         print("→ Выключение")
         shutdown_pc()
 
-    # 🔊 ГРОМКОСТЬ
     elif "громкость" in command:
 
         for word, number in NUMBERS.items():
@@ -96,10 +84,6 @@ def handle_command(text: str):
                 set_volume(number)
                 break
 
-
-# --------------------
-# MICROPHONE CALLBACK
-# --------------------
 
 def callback(indata, frames, time, status):
 
@@ -115,10 +99,6 @@ def callback(indata, frames, time, status):
             handle_command(text)
 
 
-# --------------------
-# MAIN LOOP
-# --------------------
-
 with sd.RawInputStream(
     samplerate=SAMPLE_RATE,
     blocksize=8000,
@@ -127,7 +107,7 @@ with sd.RawInputStream(
     callback=callback
 ):
 
-    print("🎤 Ассистент запущен")
+    print("voice assistent starts")
 
     while True:
         pass
