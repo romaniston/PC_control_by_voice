@@ -5,12 +5,21 @@ from vosk import Model, KaldiRecognizer
 SAMPLE_RATE = 16000
 
 model = Model("model")
-rec = KaldiRecognizer(model, SAMPLE_RATE)
+
+recognizer = KaldiRecognizer(model, SAMPLE_RATE)
 
 def callback(indata, frames, time, status):
-    if rec.AcceptWaveform(indata):
-        result = json.loads(rec.Result())
-        print("I heard:", result.get("text"))
+
+    audio_data = bytes(indata)
+
+    if recognizer.AcceptWaveform(audio_data):
+
+        result = json.loads(recognizer.Result())
+
+        text = result.get("text", "").strip()
+
+        if text:
+            print("result:", text)
 
 with sd.RawInputStream(
     samplerate=SAMPLE_RATE,
@@ -19,6 +28,7 @@ with sd.RawInputStream(
     channels=1,
     callback=callback
 ):
-    print(" Listening...")
+    print("I listening")
+
     while True:
         pass
